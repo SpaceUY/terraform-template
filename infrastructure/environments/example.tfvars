@@ -1,0 +1,6 @@
+region = "us-east-1"
+project = ""
+frontend_domain = ""
+backend_domain = ""
+frontend_acm_arn = ""
+backend_acm_arn = ""
