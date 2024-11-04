@@ -21,3 +21,9 @@ In order to deploy the terraform infra, a workspace needs to be created, selecte
 sh scripts/new-workspace.sh <workspace>
 ```
 Using `dev` as the workspace - for example - will create a `deploy-dev.sh` in the root directory, which can be called to deploy to that respective environment. It will also create a tfvars file for that environment in the `infrastructure/environments/` folder, by making a copy of the `example.tfvars` in that same folder. The variables must be set before using the deploy script
+### Usage in CI/CD
+The deploy scripts will utilize the aforementioned tfvar files and will show a confirmation with the planned changes. This isn't usable in automated environments. The deploy scripts can be called with a `-ci` flag, like so:
+```sh
+sh deploy-example.sh -ci
+```
+This will instead expect variables to be set via environment variables (see [here](https://developer.hashicorp.com/terraform/cli/config/environment-variables#tf_var_name) for more information), and will automatically start the deploy without awaiting confirmation
