@@ -16,12 +16,6 @@ variable "frontend_domain" {
   description = "domain url for frontend"
 }
 
-variable "admin_domain" {
-  type        = string
-  nullable    = false
-  description = "domain url for admin"
-}
-
 variable "backend_domain" {
   type = string
   nullable = false
@@ -29,12 +23,6 @@ variable "backend_domain" {
 }
 
 variable "frontend_acm_arn" {
-  type        = string
-  nullable    = false
-  description = "ARN of the Certificate for SSL"
-}
-
-variable "admin_acm_arn" {
   type        = string
   nullable    = false
   description = "ARN of the Certificate for SSL"
@@ -91,17 +79,7 @@ variable "cloudfront_price_class" {
   }
 }
 
-variable "existing_db_password" {
-  type = string
-  nullable = true
-  default = null
-}
-
 variable "db_size" {
   type = string
   default = "db.t4g.medium"
-}
-
-variable "cache_size" {
-  type = string
 }

@@ -6,18 +6,12 @@
 #                   |      25  |     4 |      9 | 255 - 5 = 250
 #
 # (Subnet) Groups - 0: public | 1: private | 2: intra | 3: database 
-#
-#
-#       10 .            ? .              ? .
-# 00001010   001 |  00000 |   000  | 00000   00000000
-#   VPC Network  | Region | Subnet |   Hosts
-#                |     25 |     9  | 8192 - 5 = 8187
+
 
 
 
 locals {
   vpc_cidr              = cidrsubnet("10.0.0.0/14", 5, var.region_number[var.region])
-  vpc_k8s_cidr          = cidrsubnet(cidrsubnet("10.0.0.0/10", 1, 1), 5, var.region_number[var.region])
   public_subnets_cidr   = cidrsubnet(local.vpc_cidr, 2, 0)
   database_subnets_cidr = cidrsubnet(local.vpc_cidr, 2, 3)
 }
@@ -29,7 +23,6 @@ module "vpc" {
   name = "${local.name_prefix}--vpc"
   azs  = data.aws_availability_zones.available.names
   cidr = local.vpc_cidr
-  secondary_cidr_blocks = [local.vpc_k8s_cidr]
   
 
   enable_dns_hostnames = true
@@ -52,19 +45,10 @@ module "vpc" {
     cidrsubnet(local.public_subnets_cidr, 3, 0),
     cidrsubnet(local.public_subnets_cidr, 3, 1),
     cidrsubnet(local.public_subnets_cidr, 3, 2),
-    cidrsubnet(local.vpc_k8s_cidr, 3, 3),
-    cidrsubnet(local.vpc_k8s_cidr, 3, 4),
-    cidrsubnet(local.vpc_k8s_cidr, 3, 5),
   ]
   database_subnets = [
     cidrsubnet(local.database_subnets_cidr, 3, 0),
     cidrsubnet(local.database_subnets_cidr, 3, 1),
     cidrsubnet(local.database_subnets_cidr, 3, 2),
-  ]
-
-  private_subnets = [
-    cidrsubnet(local.vpc_k8s_cidr, 3, 0),
-    cidrsubnet(local.vpc_k8s_cidr, 3, 1),
-    cidrsubnet(local.vpc_k8s_cidr, 3, 2),
   ]
 }

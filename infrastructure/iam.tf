@@ -52,40 +52,6 @@ resource "aws_iam_policy" "backend_policy" {
           "secretsmanager:*"
         ],
         "Resource" : aws_secretsmanager_secret.secrets_manager.arn
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ses:*"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "eks:DescribeCluster"
-        ],
-        "Resource" : module.eks.cluster_arn
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:*"
-        ],
-        "Resource" : [
-          aws_s3_bucket.avatars_s3.arn,
-          "${aws_s3_bucket.avatars_s3.arn}/*"
-        ]
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ssmmessages:CreateControlChannel",
-          "ssmmessages:CreateDataChannel",
-          "ssmmessages:OpenControlChannel",
-          "ssmmessages:OpenDataChannel"
-        ],
-        "Resource" : "*"
       }
     ]
   })
@@ -100,73 +66,6 @@ resource "aws_iam_role_policy_attachment" "backend_role_policy_attachment" {
   role       = aws_iam_role.backend_role.name
   policy_arn = aws_iam_policy.backend_policy.arn
 }
-
-
-# resource "aws_iam_user_policy" "backend_user_policy" {
-#   name = "${local.name_prefix}--backend-user-policy"
-#   user = aws_iam_user.backend_user.name
-
-#   policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [
-#       {
-#         "Action" : [
-#           "autoscaling:Describe*",
-#           "cloudwatch:*",
-#           "logs:*",
-#           "sns:*",
-#           "iam:GetPolicy",
-#           "iam:GetPolicyVersion",
-#           "iam:GetRole"
-#         ],
-#         "Effect" : "Allow",
-#         "Resource" : "*"
-#       },
-#       {
-#         "Effect" : "Allow",
-#         "Action" : "iam:CreateServiceLinkedRole",
-#         "Resource" : "arn:aws:iam::*:role/aws-service-role/events.amazonaws.com/AWSServiceRoleForCloudWatchEvents*",
-#         "Condition" : {
-#           "StringLike" : {
-#             "iam:AWSServiceName" : "events.amazonaws.com"
-#           }
-#         }
-#       },
-#       {
-#         "Effect" : "Allow",
-#         "Action" : [
-#           "secretsmanager:*"
-#         ],
-#         "Resource" : aws_secretsmanager_secret.secrets_manager.arn
-#       },
-#       {
-#         "Effect" : "Allow",
-#         "Action" : [
-#           "ses:*"
-#         ],
-#         "Resource" : "*"
-#       },
-#       {
-#         "Effect" : "Allow",
-#         "Action" : [
-#           "eks:DescribeCluster"
-#         ],
-#         "Resource" : module.eks.cluster_arn
-#       },
-#       {
-#         "Effect" : "Allow",
-#         "Action" : [
-#           "s3:*"
-#         ],
-#         "Resource" : [
-#           aws_s3_bucket.avatars_s3.arn,
-#           "${aws_s3_bucket.avatars_s3.arn}/*"
-#         ]
-#       }
-#     ]
-#   })
-# }
-
 
 resource "aws_iam_access_key" "backend_user_creds" {
   user = aws_iam_user.backend_user.name

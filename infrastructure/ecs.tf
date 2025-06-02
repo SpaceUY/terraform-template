@@ -2,10 +2,6 @@ resource "aws_ecr_repository" "ecr_repository" {
   name = "${replace(local.name_prefix, "--", "-")}-ecr-repository"
 }
 
-resource "aws_ecr_repository" "ecr_repository_gameserver" {
-  name = "${replace(local.name_prefix_gs, "--", "-")}-ecr-repository"
-}
-
 resource "aws_ecs_cluster" "cluster" {
   name = "${local.name_prefix}--ecs-cluster"
 }
