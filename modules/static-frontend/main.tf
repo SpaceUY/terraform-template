@@ -130,6 +130,7 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 }
 
 data "aws_iam_policy_document" "deploy_policy_doc" {
+  count = var.create ? 1 : 0
   statement {
     sid    = "S3Deploy"
     effect = "Allow"
@@ -158,7 +159,8 @@ data "aws_iam_policy_document" "deploy_policy_doc" {
 }
 
 resource "aws_iam_user_policy" "deploy_policy" {
+  count = var.create ? 1 : 0
   name   = "${var.prefix}--deploy-policy"
   user   = var.iam_deploying_user_name
-  policy = data.aws_iam_policy_document.deploy_policy_doc.json
+  policy = data.aws_iam_policy_document.deploy_policy_doc[0].json
 }

@@ -10,12 +10,6 @@ variable "prefix" {
   description = "Prefix for the static frontend resources"
 }
 
-variable "region" {
-  type = string
-  nullable = false
-  description = "Region for the static frontend resources"
-}
-
 variable "domain" {
   type        = string
   nullable    = false

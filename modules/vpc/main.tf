@@ -20,7 +20,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.8.1"
 
-  name = "${local.name_prefix}--vpc"
+  name = "${var.prefix}--vpc"
   azs  = data.aws_availability_zones.available.names
   cidr = local.vpc_cidr
   
@@ -37,7 +37,7 @@ module "vpc" {
 
   create_database_subnet_group           = true
   create_database_subnet_route_table     = true
-  create_database_internet_gateway_route = !var.secured
+  create_database_internet_gateway_route = var.publicly_accessible_database
 
   create_egress_only_igw = false
 
