@@ -29,6 +29,13 @@ locals {
   name_prefix = "${var.project}--${terraform.workspace}"
 }
 
+
+module "vpc" {
+  source = "../modules/vpc"
+  prefix = local.name_prefix
+  region = var.region
+}
+
 module "deploy_user" {
   source = "../modules/iam-user"
   prefix = "${local.name_prefix}--deploy"
@@ -50,5 +57,13 @@ module "backend" {
   vpc_cidr_block = module.vpc.vpc_cidr_block
   vpc_public_subnets = module.vpc.public_subnets
   acm_arn = var.backend_acm_arn
+}
+
+module "database" {
+  source = "../modules/database"
+  prefix = local.name_prefix
+  vpc_id = module.vpc.vpc_id
+  vpc_cidr_block = module.vpc.vpc_cidr_block
+  db_subnet_group_name = module.vpc.database_subnet_group_name
 }
 

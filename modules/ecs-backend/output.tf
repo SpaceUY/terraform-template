@@ -13,3 +13,11 @@ output "ecr_repository_name" {
 output "ecr_repository_arn" {
   value = aws_ecr_repository.ecr_repository.arn
 }
+
+output "ecs_task_execution_role_name" {
+  value = aws_iam_role.ecs_task_execution_role.name
+}
+
+output "ecs_task_execution_role_arn" {
+  value = aws_iam_role.ecs_task_execution_role.arn
+}
